@@ -26,8 +26,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getFirestore(app);
+const analytics = getAnalytics(app);
 
 // ---------------------------
 // 2. Send OTP to Email
