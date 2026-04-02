@@ -1,83 +1,24 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { 
-    getAuth, 
-    sendSignInLinkToEmail, 
-    isSignInWithEmailLink, 
-    signInWithEmailLink 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+let generatedOTP = 0;
 
-import { 
-    getFirestore, 
-    doc, 
-    setDoc 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+function generateOTP() {
+    generatedOTP = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
+    document.getElementById("otpBox").innerHTML = "Your OTP: <b>" + generatedOTP + "</b>";
+}
 
-// ---------------------------
-// 1. Firebase Config
-// ---------------------------
-const firebaseConfig = {
-    apiKey: "AIzaSyB1VNWIXYxU4DCkVNGjLNCBNRX1PVpP3Yk,
-    authDomain: "one-time-password-2359f.firebaseapp.com",
-    projectId: "one-time-password-2359f",
-    storageBucket: "one-time-password-2359f.firebasestorage.app",
-    messagingSenderId: "982403511017",
-    appId: "1:982403511017:web:d42342e0f04f456c43f678",
-    measurementId: "G-RTPN1FJ2Y3"
-};
+function verifyOTP() {
+    let enteredOTP = document.getElementById("otpInput").value;
 
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+    if (enteredOTP == generatedOTP) {
+        document.getElementById("result").style.color = "lightgreen";
+        document.getElementById("result").innerHTML = "✔ Login Successful";
 
-// ---------------------------
-// 2. Send OTP to Email
-// ---------------------------
-window.sendOTP = function () {
-    const email = document.getElementById("email").value;
-    const name = document.getElementById("name").value;
+        // Redirect after 1 second
+        setTimeout(() => {
+            window.location.href = "https://abufirnas-md.github.io/Filling-Page/";
+        }, 1000);
 
-    if (!email || !name) {
-        document.getElementById("msg").innerHTML = "Enter name & email!";
-        return;
+    } else {
+        document.getElementById("result").style.color = "red";
+        document.getElementById("result").innerHTML = "✘ Wrong OTP";
     }
-
-    const actionCodeSettings = {
-        url: window.location.href, // same page will catch OTP link
-        handleCodeInApp: true
-    };
-
-    sendSignInLinkToEmail(auth, email, actionCodeSettings)
-        .then(() => {
-            localStorage.setItem("emailForSignIn", email);
-            localStorage.setItem("donorName", name);
-            document.getElementById("msg").innerHTML = "OTP sent to your email!";
-        })
-        .catch((error) => {
-            document.getElementById("msg").innerHTML = error.message;
-        });
-};
-
-// ---------------------------
-// 3. Verify OTP when donor clicks email link
-// ---------------------------
-if (isSignInWithEmailLink(auth, window.location.href)) {
-    let email = localStorage.getItem("emailForSignIn");
-
-    signInWithEmailLink(auth, email, window.location.href)
-        .then(async (result) => {
-
-            // save donor details
-            const uid = result.user.uid;
-
-            await setDoc(doc(db, "donors", uid), {
-                name: localStorage.getItem("donorName"),
-                email: email,
-                createdAt: new Date()
-            });
-
-            // redirect to submit-donation page
-            window.location.href = "submit-donation.html";
-        })
-        .catch((error) => {
-            console.log(error);
-        });
 }
