@@ -16,12 +16,13 @@ import {
 // 1. Firebase Config
 // ---------------------------
 const firebaseConfig = {
-    apiKey: "YOUR-API-KEY",
-    authDomain: "YOUR-AUTH-DOMAIN",
-    projectId: "YOUR-PROJECT-ID",
-    storageBucket: "YOUR-BUCKET",
-    messagingSenderId: "YOUR-SENDER-ID",
-    appId: "YOUR-APP-ID"
+    apiKey: "AIzaSyB1VNWIXYxU4DCkVNGjLNCBNRX1PVpP3Yk,
+    authDomain: "one-time-password-2359f.firebaseapp.com",
+    projectId: "one-time-password-2359f",
+    storageBucket: "one-time-password-2359f.firebasestorage.app",
+    messagingSenderId: "982403511017",
+    appId: "1:982403511017:web:d42342e0f04f456c43f678",
+    measurementId: "G-RTPN1FJ2Y3"
 };
 
 const app = initializeApp(firebaseConfig);
