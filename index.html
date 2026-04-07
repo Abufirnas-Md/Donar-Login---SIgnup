@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NexaGrant — Donor Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --emerald: #0f7a5a;
+    --emerald-light: #13a87b;
+    --emerald-pale: #e8f7f2;
+    --emerald-mid: #d0f0e5;
+    --gold: #c9922a;
+    --gold-light: #f5c06a;
+    --gold-pale: #fdf6e8;
+    --ink: #0d1f1a;
+    --ink-mid: #1e3530;
+    --muted: #4d6b62;
+    --subtle: #8aa89f;
+    --border: #d4e8e1;
+    --surface: #f4fbf8;
+    --white: #ffffff;
+    --error: #c0392b;
+    --shadow-sm: 0 2px 8px rgba(15,122,90,0.08);
+    --shadow-md: 0 8px 32px rgba(15,122,90,0.12);
+    --shadow-lg: 0 20px 60px rgba(15,122,90,0.16);
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --radius: 14px;
+    --radius-lg: 22px;
+    --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: var(--ink);
+  }
+
+  /* ── PORTAL WRAPPER ── */
+  .portal {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* ── LEFT PANEL ── */
+  .left-panel {
+    background: linear-gradient(145deg, #0d2b22 0%, #0f3d2e 40%, #123d30 100%);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem 3.5rem;
+    overflow: hidden;
+  }
+
+  .left-panel::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 480px; height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(19,168,123,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .left-panel::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,146,42,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Geometric grid decoration */
+  .geo-grid {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 0.06;
+  }
+
+  .geo-grid svg { width: 100%; height: 100%; }
+
+  .brand {
+    position: relative;
+    z-index: 2;
+  }
+
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0;
+  }
+
+  .brand-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--emerald-light), var(--gold));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .brand-icon svg { width: 22px; height: 22px; }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #e8f5f0;
+    letter-spacing: -0.02em;
+  }
+
+  .brand-name span { color: var(--gold-light); }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 0;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(19,168,123,0.15);
+    border: 1px solid rgba(19,168,123,0.3);
+    color: #7fdfc4;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    width: fit-content;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: #7fdfc4;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 800;
+    color: #e8f5f0;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-heading em {
+    font-style: italic;
+    color: var(--gold-light);
+    font-weight: 700;
+  }
+
+  .hero-sub {
+    color: #7aa396;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    max-width: 360px;
+    margin-bottom: 2.5rem;
+  }
+
+  .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #a8cec5;
+    font-size: 0.88rem;
+  }
+
+  .feature-dot {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: rgba(19,168,123,0.15);
+    border: 1px solid rgba(19,168,123,0.25);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .feature-dot svg { width: 14px; height: 14px; stroke: #7fdfc4; }
+
+  .left-footer {
+    position: relative;
+    z-index: 2;
+  }
+
+  .trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+  }
+
+  .trust-avatars {
+    display: flex;
+  }
+
+  .trust-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid #0d2b22;
+    margin-left: -8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
+    color: white;
+  }
+
+  .trust-avatar:first-child { margin-left: 0; }
+
+  .trust-text {
+    font-size: 0.78rem;
+    color: #7aa396;
+  }
+
+  .trust-text strong {
+    color: #c5e8de;
+    font-weight: 500;
+  }
+
+  /* ── RIGHT PANEL ── */
+  .right-panel {
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 3rem;
+    overflow-y: auto;
+  }
+
+  .form-container {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  /* ── TAB SWITCHER ── */
+  .tab-switcher {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--border);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 2.2rem;
+  }
+
+  .tab-btn {
+    padding: 9px 0;
+    border: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--muted);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.01em;
+  }
+
+  .tab-btn.active {
+    background: var(--white);
+    color: var(--emerald);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    font-weight: 600;
+  }
+
+  /* ── FORM HEADING ── */
+  .form-title {
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+  }
+
+  .form-sub {
+    color: var(--subtle);
+    font-size: 0.85rem;
+    margin-bottom: 1.8rem;
+  }
+
+  /* ── STEP INDICATOR ── */
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 1.8rem;
+  }
+
+  .step-node {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    transition: var(--transition);
+    flex-shrink: 0;
+  }
+
+  .step-node.done {
+    background: var(--emerald);
+    color: white;
+  }
+
+  .step-node.active {
+    background: var(--emerald);
+    color: white;
+    box-shadow: 0 0 0 3px rgba(15,122,90,0.2);
+  }
+
+  .step-node.pending {
+    background: var(--border);
+    color: var(--subtle);
+  }
+
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    transition: var(--transition);
+  }
+
+  .step-line.done { background: var(--emerald); }
+
+  .step-label-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    margin-bottom: 1.5rem;
+  }
+
+  .step-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--subtle);
+    text-align: center;
+    width: 28px;
+  }
+
+  .step-label.active { color: var(--emerald); }
+
+  /* ── FORM FIELDS ── */
+  .field-group {
+    margin-bottom: 1rem;
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 5px;
+    letter-spacing: 0.01em;
+  }
+
+  .field-wrap {
+    position: relative;
+  }
+
+  .field-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--subtle);
+  }
+
+  .field-icon svg { width: 16px; height: 16px; display: block; }
+
+  .field-input {
+    width: 100%;
+    height: 44px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--white);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink);
+    padding: 0 14px 0 40px;
+    outline: none;
+    transition: var(--transition);
+    appearance: none;
+  }
+
+  .field-input:focus {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px rgba(15,122,90,0.1);
+  }
+
+  .field-input.no-icon { padding-left: 14px; }
+
+  .field-input::placeholder { color: #b0c8c0; }
+
+  .field-input.error-state { border-color: var(--error); }
+
+  .toggle-pw {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--subtle);
+    padding: 2px;
+    transition: var(--transition);
+    display: flex; align-items: center;
+  }
+
+  .toggle-pw:hover { color: var(--emerald); }
+  .toggle-pw svg { width: 16px; height: 16px; }
+
+  /* Password with toggle — extra right padding */
+  .field-input.has-toggle { padding-right: 40px; }
+
+  /* ── OTP INPUT ── */
+  .otp-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+
+  .otp-box {
+    width: 48px; height: 54px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--white);
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 600;
+    font-family: var(--font-display);
+    color: var(--ink);
+    outline: none;
+    transition: var(--transition);
+  }
+
+  .otp-box:focus {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px rgba(15,122,90,0.1);
+  }
+
+  /* ── PASSWORD STRENGTH ── */
+  .pw-strength {
+    margin-top: 6px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .pw-bar {
+    height: 3px;
+    flex: 1;
+    border-radius: 2px;
+    background: var(--border);
+    transition: var(--transition);
+  }
+
+  .pw-bar.weak { background: #e74c3c; }
+  .pw-bar.fair { background: #f39c12; }
+  .pw-bar.good { background: #27ae60; }
+  .pw-bar.strong { background: var(--emerald); }
+
+  .pw-strength-label {
+    font-size: 0.7rem;
+    color: var(--subtle);
+    min-width: 44px;
+    text-align: right;
+  }
+
+  /* ── CHECKBOX ── */
+  .check-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin: 1rem 0;
+    cursor: pointer;
+  }
+
+  .check-wrap input[type="checkbox"] {
+    width: 16px; height: 16px;
+    margin-top: 2px;
+    accent-color: var(--emerald);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .check-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .check-label a {
+    color: var(--emerald);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    width: 100%;
+    height: 46px;
+    border: none;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, var(--emerald) 0%, #0a6449 100%);
+    color: white;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: var(--transition);
+  }
+
+  .btn-primary:hover::after { background: rgba(255,255,255,0.07); }
+  .btn-primary:active { transform: scale(0.99); }
+
+  .btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    width: 100%;
+    height: 46px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--emerald);
+    color: var(--emerald);
+    background: var(--emerald-pale);
+  }
+
+  .btn-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+    margin-top: 1.2rem;
+  }
+
+  /* ── LINKS ── */
+  .form-link {
+    font-size: 0.82rem;
+    color: var(--emerald);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .form-link:hover { text-decoration: underline; }
+
+  .form-footer {
+    text-align: center;
+    margin-top: 1.3rem;
+    font-size: 0.82rem;
+    color: var(--subtle);
+  }
+
+  .form-footer span { cursor: pointer; color: var(--emerald); font-weight: 500; }
+  .form-footer span:hover { text-decoration: underline; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 1.2rem 0;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .divider-text {
+    font-size: 0.75rem;
+    color: var(--subtle);
+    white-space: nowrap;
+  }
+
+  /* ── ALERT ── */
+  .alert {
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    display: none;
+  }
+
+  .alert.error {
+    background: #fdf0ee;
+    border: 1px solid #f5c6c1;
+    color: var(--error);
+  }
+
+  .alert.show { display: flex; }
+  .alert svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  /* ── SUCCESS STATE ── */
+  .success-state {
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  .success-icon {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--emerald-pale), var(--emerald-mid));
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.2rem;
+  }
+
+  .success-icon svg { width: 36px; height: 36px; stroke: var(--emerald); }
+
+  .success-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .success-sub { color: var(--subtle); font-size: 0.88rem; line-height: 1.6; margin-bottom: 1.5rem; }
+
+  /* ── FORGOT PASSWORD ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.show { display: flex; }
+
+  .modal-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    width: 90%;
+    max-width: 380px;
+    box-shadow: var(--shadow-lg);
+    animation: modalIn 0.25s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .modal-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+
+  .modal-sub { color: var(--subtle); font-size: 0.82rem; margin-bottom: 1.5rem; }
+  .modal-close { float: right; cursor: pointer; color: var(--subtle); background: none; border: none; font-size: 1.1rem; padding: 0; margin-top: -2px; }
+
+  /* ── HINT BOX ── */
+  .hint-box {
+    background: var(--emerald-pale);
+    border: 1px solid var(--emerald-mid);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    color: var(--emerald);
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 7px;
+    align-items: flex-start;
+  }
+
+  .hint-box svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── LOADER SPINNER ── */
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.35);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .portal { grid-template-columns: 1fr; }
+    .left-panel { display: none; }
+    .right-panel { padding: 2rem 1.5rem; }
+  }
+
+  /* ── TRANSITIONS for sections ── */
+  .form-section { display: none; }
+  .form-section.active { display: block; }
+
+  /* Fade-in */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .form-section.active { animation: fadeIn 0.25s ease forwards; }
+
+  /* OTP hint row */
+  .otp-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--subtle);
+    margin-top: 6px;
+  }
+
+  .resend-btn {
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    color: var(--emerald);
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .resend-btn:hover { text-decoration: underline; }
+
+  /* Row for forgot pw */
+  .field-meta {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -4px;
+    margin-bottom: 0.8rem;
+  }
+
+  /* Remember me row */
+  .remember-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0.4rem 0 1rem;
+  }
+
+  .remember-check {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .remember-check input { accent-color: var(--emerald); width: 14px; height: 14px; cursor: pointer; }
+
+  /* Input row grid for 2-col */
+  .input-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- FORGOT PASSWORD MODAL -->
+<div class="modal-overlay" id="forgotModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeForgot()">✕</button>
+    <div class="modal-title">Reset Password</div>
+    <div class="modal-sub">Enter your registered email address and we'll send you a secure reset link.</div>
+    <div class="field-group">
+      <label class="field-label">Registered Email</label>
+      <div class="field-wrap">
+        <span class="field-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+        <input type="email" class="field-input" placeholder="donor@example.com" />
+      </div>
+    </div>
+    <button class="btn-primary" onclick="closeForgot()">Send Reset Link</button>
+  </div>
+</div>
+
+<div class="portal">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="geo-grid">
+      <svg viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <pattern id="grid" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+            <path d="M 60 0 L 0 0 0 60" fill="none" stroke="white" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="600" height="800" fill="url(#grid)" />
+        <circle cx="500" cy="100" r="180" fill="none" stroke="white" stroke-width="0.5"/>
+        <circle cx="80" cy="650" r="120" fill="none" stroke="white" stroke-width="0.5"/>
+      </svg>
+    </div>
+
+    <div class="brand">
+      <div class="brand-logo">
+        <div class="brand-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+            <path d="M12 21.7C5.3 17.2 2 13 2 9.5 2 6.4 4.5 4 7.5 4c1.5 0 3 .7 4.5 2 1.5-1.3 3-2 4.5-2 3 0 5.5 2.4 5.5 5.5 0 3.5-3.3 7.7-10 12.2z"/>
+          </svg>
+        </div>
+        <span class="brand-name">Nexa<span>Grant</span></span>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-tag">Donor Portal</div>
+      <h1 class="hero-heading">Give <em>Meaningfully.</em><br>Track Transparently.</h1>
+      <p class="hero-sub">A secure, unified platform for donors to manage contributions, view impact reports, and stay connected with the causes that matter to you.</p>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-dot">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path d="M9 12l2 2 4-4M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          </div>
+          Transparent fund utilisation reports
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+          </div>
+          Real-time impact tracking dashboard
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          Bank-grade security &amp; data privacy
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </div>
+          80G tax certificates auto-generated
+        </div>
+      </div>
+    </div>
+
+    <div class="left-footer">
+      <div class="trust-badge">
+        <div class="trust-avatars">
+          <div class="trust-avatar">RK</div>
+          <div class="trust-avatar" style="background:linear-gradient(135deg,#c9922a,#f5c06a)">PM</div>
+          <div class="trust-avatar" style="background:linear-gradient(135deg,#0a4a38,#0f7a5a)">SL</div>
+          <div class="trust-avatar" style="background:linear-gradient(135deg,#8e3ab0,#c16ee8)">AJ</div>
+        </div>
+        <div class="trust-text">Trusted by <strong>12,000+</strong> donors across India</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="form-container">
+
+      <!-- TAB SWITCHER -->
+      <div class="tab-switcher">
+        <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">Sign In</button>
+        <button class="tab-btn" id="signupTab" onclick="switchTab('signup')">Create Account</button>
+      </div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- LOGIN PANEL -->
+      <!-- ═══════════════════════════════════════ -->
+      <div id="loginPanel">
+        <h2 class="form-title">Welcome back</h2>
+        <p class="form-sub">Sign in to your donor account</p>
+
+        <div class="alert error" id="loginAlert">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="loginAlertMsg">Invalid credentials. Please try again.</span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Email Address</label>
+          <div class="field-wrap">
+            <span class="field-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+            <input type="email" class="field-input" id="loginEmail" placeholder="you@example.com" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <div class="field-wrap">
+            <span class="field-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
+            <input type="password" class="field-input has-toggle" id="loginPassword" placeholder="Enter your password" />
+            <button class="toggle-pw" type="button" onclick="togglePw('loginPassword', this)">
+              <svg id="eyeLogin" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="remember-row">
+          <label class="remember-check">
+            <input type="checkbox" checked /> Remember me
+          </label>
+          <a class="form-link" onclick="openForgot()">Forgot password?</a>
+        </div>
+
+        <button class="btn-primary" id="loginBtn" onclick="doLogin()">
+          <span id="loginBtnTxt">Sign In</span>
+          <div class="spinner" id="loginSpinner"></div>
+        </button>
+
+        <div class="form-footer">
+          Don't have an account? <span onclick="switchTab('signup')">Create one →</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- SIGNUP PANEL -->
+      <!-- ═══════════════════════════════════════ -->
+      <div id="signupPanel" style="display:none">
+
+        <!-- STEP INDICATOR -->
+        <div class="step-indicator" id="stepIndicator">
+          <div class="step-node active" id="sn1">1</div>
+          <div class="step-line" id="sl1"></div>
+          <div class="step-node pending" id="sn2">2</div>
+          <div class="step-line" id="sl2"></div>
+          <div class="step-node pending" id="sn3">3</div>
+          <div class="step-line" id="sl3"></div>
+          <div class="step-node pending" id="sn4">✓</div>
+        </div>
+        <div class="step-label-row">
+          <span class="step-label active" id="lbl1">Info</span>
+          <span class="step-label" id="lbl2">Verify</span>
+          <span class="step-label" id="lbl3">Creds</span>
+          <span class="step-label" id="lbl4">Done</span>
+        </div>
+
+        <!-- STEP 1: Personal Info -->
+        <div class="form-section active" id="step1">
+          <h2 class="form-title">Your details</h2>
+          <p class="form-sub">Step 1 of 3 — Personal information</p>
+
+          <div class="input-2col">
+            <div class="field-group">
+              <label class="field-label">First Name *</label>
+              <div class="field-wrap">
+                <span class="field-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                <input type="text" class="field-input" id="firstName" placeholder="Arjun" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Last Name *</label>
+              <div class="field-wrap">
+                <span class="field-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                <input type="text" class="field-input" id="lastName" placeholder="Kumar" />
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Email Address *</label>
+            <div class="field-wrap">
+              <span class="field-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+              <input type="email" class="field-input" id="regEmail" placeholder="arjun@example.com" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Mobile Number *</label>
+            <div class="field-wrap">
+              <span class="field-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></span>
+              <input type="tel" class="field-input" id="regPhone" placeholder="+91 98765 43210" />
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="goStep2()">Continue →</button>
+          <div class="form-footer">Already registered? <span onclick="switchTab('login')">Sign in →</span></div>
+        </div>
+
+        <!-- STEP 2: OTP -->
+        <div class="form-section" id="step2">
+          <h2 class="form-title">Verify email</h2>
+          <p class="form-sub">Step 2 of 3 — Enter the 6-digit OTP sent to your email</p>
+
+          <div class="hint-box">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <span>Demo OTP: <strong>1 2 3 4 5 6</strong></span>
+          </div>
+
+          <div class="otp-row">
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" id="o1" oninput="otpNext(this,'o2')" />
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" id="o2" oninput="otpNext(this,'o3')" />
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" id="o3" oninput="otpNext(this,'o4')" />
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" id="o4" oninput="otpNext(this,'o5')" />
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" id="o5" oninput="otpNext(this,'o6')" />
+            <input class="otp-box" maxlength="1" type="text" inputmode="numeric" id="o6" oninput="otpNext(this,null)" />
+          </div>
+
+          <div class="otp-meta">
+            <span id="otpTimer">Resend in 30s</span>
+            <button class="resend-btn" id="resendBtn" disabled onclick="startTimer()">Resend OTP</button>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-secondary" onclick="goToStep(1)">← Back</button>
+            <button class="btn-primary" onclick="verifyOtp()">Verify & Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Credentials -->
+        <div class="form-section" id="step3">
+          <h2 class="form-title">Create credentials</h2>
+          <p class="form-sub">Step 3 of 3 — Set your login password</p>
+
+          <div class="field-group">
+            <label class="field-label">Username *</label>
+            <div class="field-wrap">
+              <span class="field-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M6 20v-1a6 6 0 0112 0v1"/></svg></span>
+              <input type="text" class="field-input" id="regUsername" placeholder="arjun_donor" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Password *</label>
+            <div class="field-wrap">
+              <span class="field-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
+              <input type="password" class="field-input has-toggle" id="regPw" placeholder="Min 8 characters" oninput="checkStrength(this.value)" />
+              <button class="toggle-pw" type="button" onclick="togglePw('regPw', this)">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="pw-strength">
+              <div class="pw-bar" id="bar1"></div>
+              <div class="pw-bar" id="bar2"></div>
+              <div class="pw-bar" id="bar3"></div>
+              <div class="pw-bar" id="bar4"></div>
+              <span class="pw-strength-label" id="strengthLabel"></span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Confirm Password *</label>
+            <div class="field-wrap">
+              <span class="field-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
+              <input type="password" class="field-input has-toggle" id="regPwConfirm" placeholder="Re-enter password" />
+              <button class="toggle-pw" type="button" onclick="togglePw('regPwConfirm', this)">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <label class="check-wrap">
+            <input type="checkbox" id="termsCheck" />
+            <span class="check-label">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a> of NexaGrant</span>
+          </label>
+
+          <div class="btn-row">
+            <button class="btn-secondary" onclick="goToStep(2)">← Back</button>
+            <button class="btn-primary" onclick="createAccount()">
+              <span id="regBtnTxt">Create Account</span>
+              <div class="spinner" id="regSpinner"></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Success -->
+        <div class="form-section" id="step4">
+          <div class="success-state">
+            <div class="success-icon">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="success-title">Account Created!</div>
+            <p class="success-sub">Your donor account has been created successfully. You can now sign in and start making a difference.</p>
+            <button class="btn-primary" onclick="switchTab('login')">Proceed to Sign In →</button>
+            <div class="form-footer" style="margin-top:1rem">Already verified? <span onclick="switchTab('login')">Sign in →</span></div>
+          </div>
+        </div>
+
+      </div>
+      <!-- end signupPanel -->
+
+    </div>
+  </div>
+  <!-- end right-panel -->
+
+</div>
+<!-- end portal -->
+
+<script>
+  /* ───────────── TAB SWITCH ───────────── */
+  function switchTab(tab) {
+    const loginPanel = document.getElementById('loginPanel');
+    const signupPanel = document.getElementById('signupPanel');
+    const loginTab = document.getElementById('loginTab');
+    const signupTab = document.getElementById('signupTab');
+
+    if (tab === 'login') {
+      loginPanel.style.display = 'block';
+      signupPanel.style.display = 'none';
+      loginTab.classList.add('active');
+      signupTab.classList.remove('active');
+    } else {
+      loginPanel.style.display = 'none';
+      signupPanel.style.display = 'block';
+      loginTab.classList.remove('active');
+      signupTab.classList.add('active');
+      goToStep(1);
+    }
+  }
+
+  /* ───────────── LOGIN ───────────── */
+  function doLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pw = document.getElementById('loginPassword').value;
+    const alert = document.getElementById('loginAlert');
+    const btn = document.getElementById('loginBtn');
+    const txt = document.getElementById('loginBtnTxt');
+    const spin = document.getElementById('loginSpinner');
+
+    alert.classList.remove('show');
+
+    if (!email || !pw) {
+      document.getElementById('loginAlertMsg').textContent = 'Please fill in all fields.';
+      alert.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true;
+    txt.style.display = 'none';
+    spin.style.display = 'block';
+
+    setTimeout(() => {
+      btn.disabled = false;
+      txt.style.display = 'inline';
+      spin.style.display = 'none';
+
+      // Any non-empty credentials work for demo — redirect to Donor Filling Page
+      window.location.href = 'https://abufirnas-md.github.io/Donar-Filling-Page/';
+    }, 1400);
+  }
+
+  /* ───────────── PASSWORD TOGGLE ───────────── */
+  function togglePw(inputId, btn) {
+    const inp = document.getElementById(inputId);
+    const isText = inp.type === 'text';
+    inp.type = isText ? 'password' : 'text';
+    btn.querySelector('svg').innerHTML = isText
+      ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+      : '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22"/>';
+  }
+
+  /* ───────────── SIGNUP STEPS ───────────── */
+  let currentStep = 1;
+
+  function goToStep(n) {
+    document.getElementById('step' + currentStep).classList.remove('active');
+    document.getElementById('step' + n).classList.add('active');
+    currentStep = n;
+    updateStepUI(n);
+  }
+
+  function updateStepUI(n) {
+    for (let i = 1; i <= 4; i++) {
+      const node = document.getElementById('sn' + i);
+      const lbl = document.getElementById('lbl' + i);
+      if (!node) continue;
+      node.classList.remove('active','done','pending');
+      lbl.classList.remove('active');
+      if (i < n) { node.classList.add('done'); node.textContent = '✓'; }
+      else if (i === n) { node.classList.add('active'); node.textContent = i < 4 ? i : '✓'; lbl.classList.add('active'); }
+      else { node.classList.add('pending'); node.textContent = i < 4 ? i : '✓'; }
+    }
+    for (let i = 1; i <= 3; i++) {
+      const line = document.getElementById('sl' + i);
+      if (!line) continue;
+      line.classList.toggle('done', i < n);
+    }
+  }
+
+  function goStep2() {
+    const fn = document.getElementById('firstName').value.trim();
+    const ln = document.getElementById('lastName').value.trim();
+    const em = document.getElementById('regEmail').value.trim();
+    const ph = document.getElementById('regPhone').value.trim();
+    if (!fn || !ln || !em || !ph) { alert('Please fill in all fields.'); return; }
+    goToStep(2);
+    startTimer();
+  }
+
+  /* ───────────── OTP ───────────── */
+  function otpNext(el, nextId) {
+    if (el.value.length === 1 && nextId) {
+      document.getElementById(nextId).focus();
+    }
+  }
+
+  let timerInterval;
+  function startTimer() {
+    clearInterval(timerInterval);
+    let sec = 30;
+    const timerEl = document.getElementById('otpTimer');
+    const resendBtn = document.getElementById('resendBtn');
+    resendBtn.disabled = true;
+    timerEl.textContent = 'Resend in ' + sec + 's';
+    timerInterval = setInterval(() => {
+      sec--;
+      if (sec <= 0) {
+        clearInterval(timerInterval);
+        timerEl.textContent = '';
+        resendBtn.disabled = false;
+      } else {
+        timerEl.textContent = 'Resend in ' + sec + 's';
+      }
+    }, 1000);
+  }
+
+  function verifyOtp() {
+    const otp = ['o1','o2','o3','o4','o5','o6'].map(id => document.getElementById(id).value).join('');
+    if (otp === '123456') {
+      goToStep(3);
+    } else {
+      ['o1','o2','o3','o4','o5','o6'].forEach(id => {
+        document.getElementById(id).style.borderColor = '#e74c3c';
+      });
+      setTimeout(() => {
+        ['o1','o2','o3','o4','o5','o6'].forEach(id => {
+          document.getElementById(id).style.borderColor = '';
+        });
+      }, 1500);
+    }
+  }
+
+  /* ───────────── PASSWORD STRENGTH ───────────── */
+  function checkStrength(pw) {
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+    const bars = ['bar1','bar2','bar3','bar4'];
+    const levels = ['','weak','fair','good','strong'];
+    const labels = ['','Weak','Fair','Good','Strong'];
+
+    bars.forEach((id, i) => {
+      const bar = document.getElementById(id);
+      bar.className = 'pw-bar';
+      if (i < score) bar.classList.add(levels[score]);
+    });
+    document.getElementById('strengthLabel').textContent = pw.length ? labels[score] : '';
+  }
+
+  /* ───────────── CREATE ACCOUNT ───────────── */
+  function createAccount() {
+    const un = document.getElementById('regUsername').value.trim();
+    const pw = document.getElementById('regPw').value;
+    const pwc = document.getElementById('regPwConfirm').value;
+    const tc = document.getElementById('termsCheck').checked;
+
+    if (!un || !pw || !pwc) { alert('Please fill in all fields.'); return; }
+    if (pw !== pwc) { alert('Passwords do not match.'); return; }
+    if (!tc) { alert('Please accept the Terms of Service.'); return; }
+
+    const btn = document.querySelector('#step3 .btn-primary');
+    const txt = document.getElementById('regBtnTxt');
+    const spin = document.getElementById('regSpinner');
+    btn.disabled = true;
+    txt.style.display = 'none';
+    spin.style.display = 'block';
+
+    setTimeout(() => {
+      btn.disabled = false;
+      txt.style.display = 'inline';
+      spin.style.display = 'none';
+      goToStep(4);
+    }, 1600);
+  }
+
+  /* ───────────── FORGOT PASSWORD MODAL ───────────── */
+  function openForgot() { document.getElementById('forgotModal').classList.add('show'); }
+  function closeForgot() { document.getElementById('forgotModal').classList.remove('show'); }
+
+  document.getElementById('forgotModal').addEventListener('click', function(e) {
+    if (e.target === this) closeForgot();
+  });
+
+  /* ───────────── ENTER KEY SUPPORT ───────────── */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      const loginPanel = document.getElementById('loginPanel');
+      if (loginPanel.style.display !== 'none') doLogin();
+    }
+  });
+</script>
+</body>
+</html>
